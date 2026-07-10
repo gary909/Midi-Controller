@@ -1,3 +1,15 @@
+/*
+ #     #                #####                                                                
+ ##   ## # #####  #    #     #  ####  #    # ##### #####   ####  #      #      ###### #####  
+ # # # # # #    # #    #       #    # ##   #   #   #    # #    # #      #      #      #    # 
+ #  #  # # #    # #    #       #    # # #  #   #   #    # #    # #      #      #####  #    # 
+ #     # # #    # #    #       #    # #  # #   #   #####  #    # #      #      #      #####  
+ #     # # #    # #    #     # #    # #   ##   #   #   #  #    # #      #      #      #   #  
+ #     # # #####  #     #####   ####  #    #   #   #    #  ####  ###### ###### ###### #    # 
+
+ This is the 1st step in my MIDI Controller...  It's only using 1 pot so, via a mux. More to follow!
+ */                                                                                            
+
 #include <MIDI.h>
 
 // Initialize the MIDI library on the hardware serial port
