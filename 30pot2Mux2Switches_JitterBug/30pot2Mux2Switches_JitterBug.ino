@@ -140,6 +140,10 @@ int readMux(int sigPin, int channel) {
   digitalWrite(s1, (channel >> 1) & 0x01);
   digitalWrite(s2, (channel >> 2) & 0x01);
   digitalWrite(s3, (channel >> 3) & 0x01);
+
+  delayMicroseconds(20); // Testing for jitter - remove this? ###############################
+  analogRead(sigPin); // Testing for jitter - remove this?    ###############################
+
   return analogRead(sigPin);
 }
 
@@ -156,7 +160,7 @@ void loop() {
       int midiVal = rawVal / 8; // Scale 0-1023 to 0-127
 
       // Send only if value changed by more than 1 to prevent jitter ##changed to '2' for testing
-      if (abs(midiVal - pots[i].lastValue) > 2) {
+      if (abs(midiVal - pots[i].lastValue) > 3) { // Testing for jitter - change 3 back to 1?    ###############################
         MIDI.sendControlChange(pots[i].ccNumber, midiVal, pots[i].midiChannel);
         pots[i].lastValue = midiVal;
       }
