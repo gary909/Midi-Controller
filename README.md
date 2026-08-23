@@ -1,5 +1,7 @@
 "# Midi-Controller" 
 
+A midi controller for the JT4000m (not finished)
+
 Order of code creation:
 
 1. 1potMux
