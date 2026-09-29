@@ -1,6 +1,7 @@
 "# Midi-Controller" 
 
 JT4000m:
+
 001 - confirm pots are working
 
 A midi controller for the JT4000m (not finished)
