@@ -1,7 +1,7 @@
 "# Midi-Controller" 
 _________________________________________________
 A midi controller for the JT4000m (not finished)
-_________________________________________________
+
 
 JT4000m:
 003 - changed pot layout
