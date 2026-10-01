@@ -5,7 +5,9 @@ A midi controller for the JT4000m (not finished)
 
 JT4000m:
 003 - changed pot layout
+
 002 - reconfigured pots / cleared errors
+
 001 - confirm pots are working
 
 _________________________________________________
