@@ -1,10 +1,11 @@
+
 /*
 ┏┳┓╻╺┳┓╻   ┏━╸┏━┓┏┓╻╺┳╸┏━┓┏━┓╻  ╻  ┏━╸┏━┓
 ┃┃┃┃ ┃┃┃   ┃  ┃ ┃┃┗┫ ┃ ┣┳┛┃ ┃┃  ┃  ┣╸ ┣┳┛
 ╹ ╹╹╺┻┛╹   ┗━╸┗━┛╹ ╹ ╹ ╹┗╸┗━┛┗━╸┗━╸┗━╸╹┗╸
 #########################################################
 
-
+002 - reconfigured pots / cleared errors
 001 - confirm pots are working
 
 */
@@ -38,52 +39,53 @@ struct Potentiometer {
 Potentiometer pots[] = {
   // MUX 1 (A0)
   {mux1Sig, 15, 24, 1, -1}, // OSC 1 Wave
-  {mux1Sig, 14, 115, 1, -1}, // OSC 1 Coarse
-  {mux1Sig, 13, 111, 1, -1}, // OSC 1 Fine
-  {mux1Sig, 12, 113, 1, -1}, // OSC 1 PWM/Saw Detune/FM
+  {mux1Sig, 11, 115, 1, -1}, // OSC 1 Coarse
+  {mux1Sig, 7, 111, 1, -1}, // OSC 1 Fine
+  {mux1Sig, 3, 113, 1, -1}, // OSC 1 PWM/Saw Detune/FM
   
 
-  {mux1Sig, 11, 70, 1, -1}, // LFO 1 AMT
-  {mux1Sig, 10, 72, 1, -1}, // LFO 1 RATE
-  {mux1Sig, 9, 54, 1, -1}, // LFO 1 WAV
-  {mux1Sig, 8, 56, 1, -1}, // LFO 1 DEST
+
+  {mux1Sig, 14, 54, 1, -1}, // LFO 1 WAV
+  {mux1Sig, 10, 56, 1, -1}, // LFO 1 DEST
+  {mux1Sig, 6, 72, 1, -1}, // LFO 1 RATE (SPEED)
+  {mux1Sig, 2, 70, 1, -1}, // LFO 1 AMT
 
 
   // Ring MOD on/off defined with pin D6
-  {mux1Sig, 7, 95, 1, -1}, // Ring Mod Amount
-  {mux1Sig, 6, 1, 1, -1}, // Mod pin15 midiCC_1
-  {mux1Sig, 5, 5, 1, -1},  // Porta pin14 midiCC_5
-  {mux1Sig, 4, 47, 1, -1},  // FILTER ENV AMT
+  {mux1Sig, 13, 95, 1, -1}, // Ring Mod Amount
+  {mux1Sig, 9, 1, 1, -1}, // Mod pin15 midiCC_1
+  {mux1Sig, 5, 5, 1, -1},  // Porta Amount pin14 midiCC_5
+  {mux1Sig, 1, 47, 1, -1},  // FILTER ENV AMT
 
 
   // x - Pot not used
   // x - Pot not used
-  {mux1Sig, 1, 74, 1, -1},  // FILTER CUTOFF
+  {mux1Sig, 4, 74, 1, -1},  // FILTER CUTOFF
   {mux1Sig, 0, 71, 1, -1},  // FILTER RESONANCE
 
 
   // MUX 2 (A1)
   {mux2Sig, 15, 25, 1, -1}, // OSC 2 Wave
-  {mux2Sig, 14, 116, 1, -1}, // OSC 2 Coarse
-  {mux1Sig, 13, 112, 1, -1}, // OSC 2 Fine
-  {mux1Sig, 12, 114, 1, -1}, // OSC 2 PWM
+  {mux2Sig, 11, 116, 1, -1}, // OSC 2 Coarse
+  {mux2Sig, 7, 112, 1, -1}, // OSC 2 Fine 
+  {mux2Sig, 3, 114, 1, -1}, // OSC 2 PWM
 
 
-  {mux2Sig, 11, 28, 1, -1},  // LFO 2 AMT
-  {mux2Sig, 10, 73, 1, -1},  // LFO 2 RATE
-  {mux2Sig, 9, 55, 1, -1},  // LFO 2 WAV
-  {mux2Sig, 8, 29, 1, -1}, // OSC Bal pin13 midiCC_29
+  {mux2Sig, 14, 55, 1, -1},  // LFO 2 WAV
+  {mux2Sig, 10, 73, 1, -1},  // LFO 2 RATE(speed)
+  {mux2Sig, 6, 28, 1, -1},  // LFO 2 AMT
+  {mux2Sig, 2, 29, 1, -1}, // OSC Bal pin13 midiCC_29
 
 
-  {mux2Sig, 7, 85, 1, -1},  // VCF ENV Attack
-  {mux2Sig, 6, 86, 1, -1},  // VCF ENV Decay
+  {mux2Sig, 13, 85, 1, -1},  // VCF ENV Attack
+  {mux2Sig, 9, 86, 1, -1},  // VCF ENV Decay
   {mux2Sig, 5, 87, 1, -1},  // VCF ENV Sustain
-  {mux2Sig, 4, 88, 1, -1},   // VCF ENV Release
+  {mux2Sig, 1, 88, 1, -1},   // VCF ENV Release
 
 
-  {mux2Sig, 3, 81, 1, -1},  // VCA Attack
-  {mux2Sig, 2, 82, 1, -1},  // VCA Decay
-  {mux2Sig, 1, 83, 1, -1},  // VCA Sustain
+  {mux2Sig, 12, 81, 1, -1},  // VCA Attack
+  {mux2Sig, 8, 82, 1, -1},  // VCA Decay
+  {mux2Sig, 4, 83, 1, -1},  // VCA Sustain
   {mux2Sig, 0, 84, 1, -1}   // VCA Release
 };
 
