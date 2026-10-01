@@ -1,10 +1,15 @@
 "# Midi-Controller" 
+_________________________________________________
+A midi controller for the JT4000m (not finished)
+_________________________________________________
 
 JT4000m:
-
+003 - changed pot layout
+002 - reconfigured pots / cleared errors
 001 - confirm pots are working
 
-A midi controller for the JT4000m (not finished)
+_________________________________________________
+Early Code:
 
 Order of code creation:
 
@@ -15,3 +20,4 @@ Order of code creation:
 5. 8pot2Mux2Switches
 6. 30pot2Mux2Switches
 7. 30pot2Mux2Switches_JitterBug = latest version, fixed pot jitter (Test!!)
+__________________________________________________
