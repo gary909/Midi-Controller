@@ -5,6 +5,8 @@ A midi controller for the JT4000m (not finished)
 
 JT4000m:
 
+005 added init butto
+
 004 - increment bug jitter fixed. Tested working.
 
 003 - changed pot layout
