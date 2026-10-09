@@ -19,11 +19,15 @@ JT4000m:
 
 TO DO:
 
-Add INIT Button
-Add Rand Button
 ADD MIDI IN/THRU?
+
 Remove MIDI ON/OFF Switch from D7?
+
 Replace P6 #56 C10 with slider switch?
+
+Add sequencer?
+
+Add on/off switch?
 
 _________________________________________________
 Early Code:
