@@ -5,7 +5,7 @@
 ╹ ╹╹╺┻┛╹   ┗━╸┗━┛╹ ╹ ╹ ╹┗╸┗━┛┗━╸┗━╸┗━╸╹┗╸
 #########################################################
 
-004 - attempting to fix 3 jump increments bug
+004 - increment bug jitter fixed. Tested working.
 003 - changed pot layout
 002 - reconfigured pots / cleared errors
 001 - confirm pots are working
