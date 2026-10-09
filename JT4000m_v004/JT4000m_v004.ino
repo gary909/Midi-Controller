@@ -1,10 +1,11 @@
+
 /*
 ┏┳┓╻╺┳┓╻   ┏━╸┏━┓┏┓╻╺┳╸┏━┓┏━┓╻  ╻  ┏━╸┏━┓
 ┃┃┃┃ ┃┃┃   ┃  ┃ ┃┃┗┫ ┃ ┣┳┛┃ ┃┃  ┃  ┣╸ ┣┳┛
 ╹ ╹╹╺┻┛╹   ┗━╸┗━┛╹ ╹ ╹ ╹┗╸┗━┛┗━╸┗━╸┗━╸╹┗╸
 #########################################################
 
-004 - fixing pot increment leaps. Currently untested
+004 - attempting to fix 3 jump increments bug
 003 - changed pot layout
 002 - reconfigured pots / cleared errors
 001 - confirm pots are working
@@ -34,44 +35,60 @@ struct Potentiometer {
   int ccNumber;
   int midiChannel;
   int lastValue;
-  int previousValue; // New: to track the value before the current adjustment
-  bool isAdjusting; // New: to track if the pot is being adjusted
 };
 
 // Define pots here (signal A0 or A1 / PIN Number / MIDI CC Number / MIDI Channel / placeholder init val -1 )
 Potentiometer pots[] = {
   // MUX 1 (A0)
-  {mux1Sig, 15, 24, 1, -1, -1, false}, // (P1) OSC 1 Wave
-  {mux1Sig, 11, 113, 1, -1, -1, false}, // (P2) OSC 1 PWM/Saw Detune/FM
-  {mux1Sig, 7, 115, 1, -1, -1, false}, // (P3) OSC 1 Coarse
-  {mux1Sig, 3, 111, 1, -1, -1, false}, // (P4) OSC 1 Fine
-  {mux1Sig, 14, 54, 1, -1, -1, false}, // (P5) LFO 1 WAV
-  {mux1Sig, 10, 56, 1, -1, -1, false}, // (P6) LFO 1 DEST
-  {mux1Sig, 6, 72, 1, -1, -1, false}, // (P7) LFO 1 RATE (SPEED)
-  {mux1Sig, 2, 70, 1, -1, -1, false}, // (P8) LFO 1 AMT
-  {mux1Sig, 13, 95, 1, -1, -1, false}, // (P9) Ring Mod Amount **control turned on by SWITCH D9***
-  {mux1Sig, 9, 1, 1, -1, -1, false}, // (P10) Mod pin15 midiCC_1
-  {mux1Sig, 5, 5, 1, -1, -1, false},  // (P11) Porta Amount pin14 midiCC_5
-  {mux1Sig, 1, 47, 1, -1, -1, false},  // (P12) FILTER ENV AMT
-  {mux1Sig, 4, 74, 1, -1, -1, false},  // (P15) FILTER CUTOFF - ** Remove this from Hardware PCB **
-  {mux1Sig, 0, 71, 1, -1, -1, false},  // (P16) FILTER RESONANCE - ** Remove this from Hardware PCB **
+  {mux1Sig, 15, 24, 1, -1}, // (P1) OSC 1 Wave
+  {mux1Sig, 11, 113, 1, -1}, // (P2) OSC 1 PWM/Saw Detune/FM
+  {mux1Sig, 7, 115, 1, -1}, // (P3) OSC 1 Coarse
+  {mux1Sig, 3, 111, 1, -1}, // (P4) OSC 1 Fine
+  
+
+
+  {mux1Sig, 14, 54, 1, -1}, // (P5) LFO 1 WAV
+  {mux1Sig, 10, 56, 1, -1}, // (P6) LFO 1 DEST
+  {mux1Sig, 6, 72, 1, -1}, // (P7) LFO 1 RATE (SPEED)
+  {mux1Sig, 2, 70, 1, -1}, // (P8) LFO 1 AMT
+
+
+  // Ring MOD on/off defined with pin D6
+  {mux1Sig, 13, 95, 1, -1}, // (P9) Ring Mod Amount **control turned on by SWITCH D9***
+  {mux1Sig, 9, 1, 1, -1}, // (P10) Mod pin15 midiCC_1
+  {mux1Sig, 5, 5, 1, -1},  // (P11) Porta Amount pin14 midiCC_5
+  {mux1Sig, 1, 47, 1, -1},  // (P12) FILTER ENV AMT
+
+
+  // x - (P13) Pot not used
+  // x - (P14) Pot not used
+  {mux1Sig, 4, 74, 1, -1},  // (P15) FILTER CUTOFF - ** Remove this from Hardware PCB **
+  {mux1Sig, 0, 71, 1, -1},  // (P16) FILTER RESONANCE - ** Remove this from Hardware PCB **
+
+
   // MUX 2 (A1)
-  {mux2Sig, 15, 25, 1, -1, -1, false}, // (P17) OSC 2 Wave
-  {mux2Sig, 11, 114, 1, -1, -1, false}, // (P18) OSC 2 PWM
-  {mux2Sig, 7, 116, 1, -1, -1, false}, // (P19) OSC 2 Coarse
-  {mux2Sig, 3, 112, 1, -1, -1, false}, // (P20) OSC 2 Fine
-  {mux2Sig, 14, 29, 1, -1, -1, false}, // (P21) OSC Bal pin13 midiCC_29
-  {mux2Sig, 10, 55, 1, -1, -1, false},  // (P22) LFO 2 WAV
-  {mux2Sig, 6, 73, 1, -1, -1, false},  // (P23) LFO 2 RATE(speed)
-  {mux2Sig, 2, 28, 1, -1, -1, false},  // (P24) LFO 2 AMT
-  {mux2Sig, 13, 85, 1, -1, -1, false},  // (P25) VCF ENV Attack
-  {mux2Sig, 9, 86, 1, -1, -1, false},  // (P26) VCF ENV Decay
-  {mux2Sig, 5, 87, 1, -1, -1, false},  // (P27) VCF ENV Sustain
-  {mux2Sig, 1, 88, 1, -1, -1, false},   // (P28) VCF ENV Release
-  {mux2Sig, 12, 81, 1, -1, -1, false},  // (P29) VCA Attack
-  {mux2Sig, 8, 82, 1, -1, -1, false},  // (P30) VCA Decay
-  {mux2Sig, 4, 83, 1, -1, -1, false},  // (P31) VCA Sustain
-  {mux2Sig, 0, 84, 1, -1, -1, false}   // (P32) VCA Release
+  {mux2Sig, 15, 25, 1, -1}, // (P17) OSC 2 Wave
+  {mux2Sig, 11, 114, 1, -1}, // (P18) OSC 2 PWM
+  {mux2Sig, 7, 116, 1, -1}, // (P19) OSC 2 Coarse
+  {mux2Sig, 3, 112, 1, -1}, // (P20) OSC 2 Fine 
+
+
+  {mux2Sig, 14, 29, 1, -1}, // (P21) OSC Bal pin13 midiCC_29
+  {mux2Sig, 10, 55, 1, -1},  // (P22) LFO 2 WAV
+  {mux2Sig, 6, 73, 1, -1},  // (P23) LFO 2 RATE(speed)
+  {mux2Sig, 2, 28, 1, -1},  // (P24) LFO 2 AMT
+
+
+  {mux2Sig, 13, 85, 1, -1},  // (P25) VCF ENV Attack
+  {mux2Sig, 9, 86, 1, -1},  // (P26) VCF ENV Decay
+  {mux2Sig, 5, 87, 1, -1},  // (P27) VCF ENV Sustain
+  {mux2Sig, 1, 88, 1, -1},   // (P28) VCF ENV Release
+
+
+  {mux2Sig, 12, 81, 1, -1},  // (P29) VCA Attack
+  {mux2Sig, 8, 82, 1, -1},  // (P30) VCA Decay
+  {mux2Sig, 4, 83, 1, -1},  // (P31) VCA Sustain
+  {mux2Sig, 0, 84, 1, -1}   // (P32) VCA Release
 };
 
 const int numPots = 30;
@@ -89,6 +106,12 @@ void setup() {
 
   // midi  on/off switch
   pinMode(7, INPUT_PULLUP);
+
+  // WARMUP: Read through all MUX channels once to charge the ADC capacitor 
+  // with real voltages before the loop begins. This stops the startup spikes.
+  for (int i = 0; i < numPots; i++) {
+    readMux(pots[i].muxPin, pots[i].muxChannel);
+  }
 }
 
 // Function to read from a specific MUX signal pin
@@ -98,10 +121,17 @@ int readMux(int sigPin, int channel) {
   digitalWrite(s2, (channel >> 2) & 0x01);
   digitalWrite(s3, (channel >> 3) & 0x01);
 
-  delayMicroseconds(20); // Testing for jitter - remove this? ###############################
-  analogRead(sigPin); // Testing for jitter - remove this?    ###############################
+  delayMicroseconds(50); // Testing for jitter - remove this? ###############################
+  
+  analogRead(sigPin); // Dummy read to clear the ADC capacitor[cite: 9]
 
-  return analogRead(sigPin);
+  // Oversampling: Take 4 sequential readings and average them to smooth out static noise
+  int total = 0;
+  for (int i = 0; i < 4; i++) {
+    total += analogRead(sigPin);
+  }
+  
+  return total / 4;
 }
 
 // --- MAIN LOOP ---
@@ -114,33 +144,31 @@ void loop() {
     // 1. Process all Pots
     for (int i = 0; i < numPots; i++) {
       int rawVal = readMux(pots[i].muxPin, pots[i].muxChannel);
-      int midiVal = rawVal / 8; // Scale 0-1023 to 0-127
-      
-      // Initialize previousValue if it's -1
-      if (pots[i].previousValue == -1) {
-        pots[i].previousValue = midiVal;
+
+      // PREVENT STARTUP JITTER: Store the warm raw value silently
+      if (pots[i].lastValue == -1) {
+        pots[i].lastValue = rawVal;
+        continue; 
       }
-      
-      // Check if the pot is being adjusted
-      if (abs(midiVal - pots[i].previousValue) > 3) {
-        pots[i].isAdjusting = true;
-      } else {
-        pots[i].isAdjusting = false;
-      }
-      
-      if (pots[i].isAdjusting) {
-        // If the pot is being adjusted, increment normally
-        MIDI.sendControlChange(pots[i].ccNumber, midiVal, pots[i].midiChannel);
-        pots[i].lastValue = midiVal;
-      } else {
-        // If the pot is not being adjusted, apply the current fix
-        if (abs(midiVal - pots[i].lastValue) > 3) {
+
+      // HYSTERESIS: Only process if the RAW signal moved by at least 8 units.
+      if (abs(rawVal - pots[i].lastValue) >= 8) {
+        
+        // FIX FOR POTS GETTING STUCK AT 95:
+        // Map the reduced hardware voltage range (0 to 760) to the full MIDI range (0 to 127)
+        int midiVal = map(rawVal, 0, 760, 0, 127); 
+        int lastMidiVal = map(pots[i].lastValue, 0, 760, 0, 127);
+
+        // Constrain to ensure values never drop below 0 or exceed 127
+        midiVal = constrain(midiVal, 0, 127);
+        lastMidiVal = constrain(lastMidiVal, 0, 127);
+
+        // Only send if the scaled MIDI value actually changed
+        if (midiVal != lastMidiVal) {
           MIDI.sendControlChange(pots[i].ccNumber, midiVal, pots[i].midiChannel);
-          pots[i].lastValue = midiVal;
+          pots[i].lastValue = rawVal; 
         }
       }
-      
-      pots[i].previousValue = midiVal;
     }
 
     // 2. Process the Ring Mod Switch
